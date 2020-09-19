@@ -220,7 +220,117 @@ string Compression1_5b(const string & s)
 
 }
 
+vector<vector<int>> Rotation1_6(const vector<vector<int>>& grid)
+{
+	
+	vector<vector<int>> rotated(grid.size(), vector<int>(grid[0].size()));
+	
 
+	
+
+	int n = grid.size();
+	for (int i = 0; i < grid.size(); i++)
+	{
+		for (int j = 0; j < grid[i].size(); j++)
+		{
+			rotated[j][n - 1 - i] = grid[i][j];
+		}
+	}
+	return rotated;
+
+}
+
+void Rotate90(int n, int i, int j, int& newI, int& newJ)
+{
+	newJ = i;
+	newI = n - 1 - j;
+}
+
+void Rotation1_6b(vector<vector<int>>& grid)
+{
+	int n = grid.size();
+	for (int i0 = 0; i0 < grid.size() / 2; i0++)
+	{
+		for (int j0 = 0; j0 < grid[i0].size() / 2; j0++)
+		{
+			int i1, j1;
+			Rotate90(n, i0, j0, i1, j1);
+
+			int i2, j2;
+			Rotate90(n, i1, j1, i2, j2);
+
+			int i3, j3;
+			Rotate90(n, i2, j2, i3, j3);
+
+			int& a = grid[i0][j0];
+			int& b = grid[i1][j1];
+			int& c = grid[i2][j2];
+			int& d = grid[i3][j3];
+
+			int temp = d;
+			d = c;
+			c = b;
+			b = a;
+			a = temp;
+
+			/*int temp = grid[i3][j3];
+			grid[i3][j3] = grid[i2][j2];
+			grid[i2][j2] = grid[i1][j1];
+			grid[i1][j1] = grid[i0][j0];
+			grid[i0][j0] = temp;*/
+		}
+	}
+	
+
+}
+
+void RowColSetZero1_7(vector<vector<int>>& v)
+{
+	for (int i = 0; i < v.size(); i++) // N
+	{
+		for (int j = 0; j < v[i].size(); i++) // M
+		{
+			if (v[i][j] == 0)
+			{
+				// N + M
+				for (int m = 0; m < v[i].size(); m++)
+				{
+					v[i][m] = 0;
+				}
+				for (int n = 0; n < v.size(); n++)
+				{
+					v[n][j] = 0;
+				}
+
+			}
+		}
+	}
+
+	//another solution below (Faster)
+	set<int> rows, cols;
+	for (int i = 0; i < v.size(); ++i)
+	{
+		for (int j = 0; j < v[i].size(); ++j)
+		{
+			if (v[i][j] == 0)
+			{
+				rows.insert(i);
+				cols.insert(j);
+			}
+		}
+	}
+
+	for (int i = 0; i < v.size(); ++i)
+	{
+		for (int j = 0; j < v[i].size(); ++j)
+		{
+			if (v[i][j] != 0 && (rows.count(i) || cols.count(i)))
+			{
+				v[i][j] = 0;
+			}
+		}
+	}
+}
 
 
 int main()
@@ -281,6 +391,24 @@ int main()
 	cout << john << endl;
 	ReplaceSpaces1_4(&john[0], 13, john.size());
 	cout << john << endl;
+
+	cout << "\nProblem 1.6" << endl;
+	vector<vector<int>> matrix = {
+		{1,2,3},
+		{4,5,6},
+		{7,8,9}
+	};
+	vector<vector<int>> m = Rotation1_6(matrix);
+	for (vector<int>& v : m)
+	{
+		for (int a : v)
+		{
+			cout << a << " ";
+		}
+		cout << endl;
+	}
+
+
 
 
 }
